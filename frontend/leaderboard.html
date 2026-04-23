@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard | FitQuest</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="dashboard.html"><span class="brand-mark">FQ</span>FitQuest</a>
+      <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="workouts.html">Workouts</a>
+        <a class="is-active" href="leaderboard.html">Leaderboard</a>
+        <a href="profile.html">Profile</a>
+        <button class="ghost-link" data-logout>Logout</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="section-heading">
+      <div>
+        <p class="eyebrow">Community ranking</p>
+        <h1>Leaderboard</h1>
+        <p class="muted">Top users ranked by total points with streak and level context.</p>
+      </div>
+    </section>
+
+    <p id="leaderboardMessage" class="form-message"></p>
+
+    <table class="leaderboard-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Username</th>
+          <th>Total points</th>
+          <th>Streak</th>
+          <th>Level</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboardRows"></tbody>
+    </table>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/leaderboard.js"></script>
+</body>
+</html>
