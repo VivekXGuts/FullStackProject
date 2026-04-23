@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile | FitQuest</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="dashboard.html"><span class="brand-mark">FQ</span>FitQuest</a>
+      <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="workouts.html">Workouts</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a class="is-active" href="profile.html">Profile</a>
+        <button class="ghost-link" data-logout>Logout</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="section-heading">
+      <div>
+        <p class="eyebrow">Account</p>
+        <h1>Profile</h1>
+        <p class="muted">Fitness level, goal settings, badges, and lifetime totals.</p>
+      </div>
+    </section>
+
+    <p id="profileMessage" class="form-message"></p>
+
+    <section class="profile-grid">
+      <article class="panel">
+        <div class="profile-avatar">FQ</div>
+        <h2 id="profileName">Athlete</h2>
+        <p id="profileEmail" class="muted"></p>
+        <div id="profileBadges" class="badge-row"></div>
+        <div id="profileStats" class="profile-stats"></div>
+      </article>
+
+      <article class="panel">
+        <h2>Settings</h2>
+        <form id="profileForm" class="form-grid">
+          <label>Fitness level
+            <select name="fitnessLevel">
+              <option>Beginner</option>
+              <option>Intermediate</option>
+              <option>Advanced</option>
+            </select>
+          </label>
+          <label>Daily activity goal
+            <input type="number" name="dailyGoal" min="1" max="6" step="1" required>
+          </label>
+          <button class="btn primary" type="submit">Save Profile</button>
+        </form>
+      </article>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

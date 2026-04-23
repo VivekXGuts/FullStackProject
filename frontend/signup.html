@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup | FitQuest</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="index.html"><span class="brand-mark">FQ</span>FitQuest</a>
+      <div class="nav-links">
+        <a href="login.html">Login</a>
+        <a class="is-active" href="signup.html">Signup</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="auth-page">
+    <section class="auth-card">
+      <h1>Create account</h1>
+      <p class="muted">Start at Level 1 with your first badge ready.</p>
+      <form id="signupForm" class="form-grid">
+        <label>Username
+          <input type="text" name="username" minlength="3" maxlength="28" autocomplete="username" required>
+        </label>
+        <label>Email
+          <input type="email" name="email" autocomplete="email" required>
+        </label>
+        <label>Password
+          <input type="password" name="password" minlength="8" autocomplete="new-password" required>
+        </label>
+        <label>Fitness level
+          <select name="fitnessLevel">
+            <option>Beginner</option>
+            <option>Intermediate</option>
+            <option>Advanced</option>
+          </select>
+        </label>
+        <button class="btn primary" type="submit">Create Account</button>
+      </form>
+      <p id="signupMessage" class="form-message"></p>
+      <p class="muted">Already registered? <a href="login.html">Login</a></p>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

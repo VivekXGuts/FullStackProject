@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | FitQuest</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="dashboard.html"><span class="brand-mark">FQ</span>FitQuest</a>
+      <div class="nav-links">
+        <a class="is-active" href="dashboard.html">Dashboard</a>
+        <a href="workouts.html">Workouts</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="profile.html">Profile</a>
+        <button class="ghost-link" data-logout>Logout</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="section-heading">
+      <div>
+        <p class="eyebrow">Your fitness command center</p>
+        <h1>Hi, <span id="welcomeName">athlete</span></h1>
+        <p class="muted">Today's progress, rewards, and training history.</p>
+      </div>
+      <a class="btn primary" href="workouts.html">Find Workout</a>
+    </section>
+
+    <p id="dashboardMessage" class="form-message"></p>
+
+    <section class="stats-grid">
+      <article class="stat-card"><span>Points earned</span><strong id="pointsValue">0</strong></article>
+      <article class="stat-card"><span>Streak counter</span><strong id="streakValue">0 days</strong></article>
+      <article class="stat-card"><span>Current level</span><strong id="levelValue">Level 1</strong></article>
+      <article class="stat-card"><span>Leaderboard rank</span><strong id="rankValue">#-</strong></article>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel">
+        <h2>Daily fitness goal</h2>
+        <div id="goalProgress"></div>
+        <p id="goalText" class="muted">0/2 activities complete</p>
+      </article>
+
+      <article class="panel challenge-card">
+        <div>
+          <h2>Daily challenge</h2>
+          <p id="challengeDescription" class="muted"></p>
+        </div>
+        <strong id="challengeTitle">Loading challenge</strong>
+        <span id="challengePoints" class="challenge-points">+0 pts</span>
+        <button id="completeChallenge" class="btn primary" type="button">Complete</button>
+      </article>
+
+      <article class="panel">
+        <h2>Level progress</h2>
+        <div id="levelProgress"></div>
+        <p id="levelText" class="muted"></p>
+      </article>
+
+      <article class="panel">
+        <h2>Badges unlocked</h2>
+        <div id="badgesList" class="badge-row"></div>
+      </article>
+
+      <article class="panel wide">
+        <h2>Weekly progress</h2>
+        <div id="weeklyBars" class="chart"></div>
+      </article>
+
+      <article class="panel wide">
+        <h2>Activity history</h2>
+        <div id="activityHistory" class="timeline"></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

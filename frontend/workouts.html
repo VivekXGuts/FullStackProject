@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workouts | FitQuest</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="dashboard.html"><span class="brand-mark">FQ</span>FitQuest</a>
+      <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a class="is-active" href="workouts.html">Workouts</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="profile.html">Profile</a>
+        <button class="ghost-link" data-logout>Logout</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="section-heading">
+      <div>
+        <p class="eyebrow">Programs</p>
+        <h1>Workout programs</h1>
+        <p class="muted">Beginner, intermediate, advanced, yoga, cardio, and strength training.</p>
+      </div>
+    </section>
+
+    <div id="workoutFilters" class="filter-row"></div>
+    <p id="workoutsMessage" class="form-message"></p>
+    <section id="workoutGrid" class="program-grid"></section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/workouts.js"></script>
+</body>
+</html>
