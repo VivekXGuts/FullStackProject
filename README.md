@@ -124,6 +124,28 @@ window.FITQUEST_CONFIG = {
 
 Commit and push that change so GitHub Pages uses the deployed API.
 
+### Deploy Backend on Vercel
+
+The repository now includes a root-level `server.js` so Vercel can detect the Express app correctly.
+
+1. Import the GitHub repository into Vercel.
+2. Keep the project root as the repository root.
+3. Add these environment variables in Vercel:
+   - `MONGODB_URI`
+   - `JWT_SECRET`
+   - `NODE_ENV=production`
+   - `CLIENT_ORIGINS=https://<your-github-username>.github.io/<your-repo-name>`
+4. Deploy.
+5. Test `https://<your-vercel-domain>/api/health`.
+
+After the backend deploy succeeds, update `frontend/js/config.js` with:
+
+```js
+window.FITQUEST_CONFIG = {
+  API_BASE_URL: 'https://<your-vercel-domain>/api'
+};
+```
+
 ### GitHub Push
 
 ```bash

@@ -2,7 +2,7 @@
   "name": "fitness-gamification-platform",
   "version": "1.0.0",
   "description": "A full-stack fitness and wellness gamification platform with workouts, badges, streaks, challenges, progress tracking, and leaderboards.",
-  "main": "backend/server.js",
+  "main": "server.js",
   "scripts": {
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js",
