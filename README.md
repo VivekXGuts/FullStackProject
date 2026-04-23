@@ -2,6 +2,12 @@
 
 FitQuest is a production-ready starter web app for motivating healthy habits with points, levels, badges, streaks, daily challenges, leaderboards, and progress tracking.
 
+## Quick Links
+
+- Repository: [FullStackProject](https://github.com/VivekXGuts/FullStackProject)
+- Frontend: [GitHub Pages](https://vivekxguts.github.io/FullStackProject/)
+- Backend API: [Vercel Health Check](https://full-stack-project-xi-amber.vercel.app/api/health)
+
 ## Stack
 
 - Frontend: HTML5, CSS3, vanilla JavaScript
