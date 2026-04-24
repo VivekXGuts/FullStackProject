@@ -117,7 +117,7 @@ Set these in your backend host dashboard:
 NODE_ENV=production
 MONGODB_URI=<your MongoDB Atlas connection string>
 JWT_SECRET=<long-random-secret>
-CLIENT_ORIGINS=https://<your-github-username>.github.io/<your-repo-name>
+CLIENT_ORIGINS=https://<your-github-username>.github.io
 ```
 
 After the backend is live, update `frontend/js/config.js`:
@@ -140,7 +140,7 @@ The repository now includes a root-level `server.js` so Vercel can detect the Ex
    - `MONGODB_URI`
    - `JWT_SECRET`
    - `NODE_ENV=production`
-   - `CLIENT_ORIGINS=https://<your-github-username>.github.io/<your-repo-name>`
+   - `CLIENT_ORIGINS=https://<your-github-username>.github.io`
 4. Deploy.
 5. Test `https://<your-vercel-domain>/api/health`.
 

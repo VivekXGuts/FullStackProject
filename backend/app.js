@@ -14,9 +14,22 @@ const leaderboardRoutes = require('./routes/leaderboard');
 
 const app = express();
 const frontendPath = path.join(__dirname, '..', 'frontend');
+
+function normalizeOrigin(value) {
+  const trimmed = String(value || '').trim();
+
+  if (!trimmed) return '';
+
+  try {
+    return new URL(trimmed).origin;
+  } catch {
+    return trimmed.replace(/\/+$/, '');
+  }
+}
+
 const allowedOrigins = (process.env.CLIENT_ORIGINS || process.env.CLIENT_ORIGIN || '')
   .split(',')
-  .map((origin) => origin.trim())
+  .map((origin) => normalizeOrigin(origin))
   .filter(Boolean);
 
 let databaseReadyPromise;
@@ -38,7 +51,13 @@ app.set('trust proxy', 1);
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+      const normalizedRequestOrigin = normalizeOrigin(origin);
+
+      if (
+        !normalizedRequestOrigin ||
+        allowedOrigins.length === 0 ||
+        allowedOrigins.includes(normalizedRequestOrigin)
+      ) {
         return callback(null, true);
       }
       return callback(new Error('Not allowed by CORS'));
