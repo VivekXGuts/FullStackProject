@@ -27,6 +27,27 @@ function normalizeOrigin(value) {
   }
 }
 
+function isAllowedByPattern(origin) {
+  if (!origin) return true;
+
+  try {
+    const url = new URL(origin);
+    const hostname = url.hostname.toLowerCase();
+
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return true;
+    }
+
+    if (hostname.endsWith('.github.io') || hostname.endsWith('.vercel.app')) {
+      return true;
+    }
+  } catch {
+    return false;
+  }
+
+  return false;
+}
+
 const allowedOrigins = (process.env.CLIENT_ORIGINS || process.env.CLIENT_ORIGIN || '')
   .split(',')
   .map((origin) => normalizeOrigin(origin))
@@ -56,7 +77,8 @@ app.use(
       if (
         !normalizedRequestOrigin ||
         allowedOrigins.length === 0 ||
-        allowedOrigins.includes(normalizedRequestOrigin)
+        allowedOrigins.includes(normalizedRequestOrigin) ||
+        isAllowedByPattern(normalizedRequestOrigin)
       ) {
         return callback(null, true);
       }
