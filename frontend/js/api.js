@@ -1,5 +1,5 @@
 const configuredApiBase = window.FITQUEST_CONFIG?.API_BASE_URL?.trim();
-const API_BASE = configuredApiBase || '/api';
+const API_BASE = configuredApiBase || 'https://full-stack-project-xi-amber.vercel.app/api';
 const TOKEN_KEY = 'fitquest_token';
 
 function getToken() {
