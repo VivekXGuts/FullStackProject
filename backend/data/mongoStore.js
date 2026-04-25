@@ -19,13 +19,18 @@ function publicUser(user) {
 }
 
 async function ensureWorkouts() {
-  const count = await Workout.countDocuments();
-  if (count === 0) {
-    await Workout.insertMany(
-      seedWorkouts.map(({ id, ...workout }) => ({
+  for (const { id, ...workout } of seedWorkouts) {
+    await Workout.findByIdAndUpdate(
+      id,
+      {
         _id: id,
         ...workout
-      }))
+      },
+      {
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true
+      }
     );
   }
 }

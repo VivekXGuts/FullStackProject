@@ -1,5 +1,26 @@
 const mongoose = require('mongoose');
 
+const exerciseSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    focus: { type: String, default: '' },
+    imageUrl: { type: String, default: '' },
+    learnLinks: {
+      type: [
+        new mongoose.Schema(
+          {
+            label: { type: String, required: true },
+            url: { type: String, required: true }
+          },
+          { _id: false }
+        )
+      ],
+      default: []
+    }
+  },
+  { _id: false }
+);
+
 const workoutSchema = new mongoose.Schema(
   {
     _id: { type: String, required: true },
@@ -27,7 +48,7 @@ const workoutSchema = new mongoose.Schema(
     difficulty: { type: String, required: true },
     calories: { type: Number, required: true },
     targetMuscles: { type: [String], default: [] },
-    exercises: { type: [String], default: [] },
+    exercises: { type: [exerciseSchema], default: [] },
     demoLinks: {
       type: [
         new mongoose.Schema(

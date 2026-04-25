@@ -21,6 +21,21 @@ const initialState = {
   }))
 };
 
+function workoutKey(workout) {
+  return workout.id || workout._id;
+}
+
+function syncSeedWorkouts(existingWorkouts = []) {
+  const existingById = new Map(existingWorkouts.map((workout) => [workoutKey(workout), workout]));
+  const synced = workouts.map((seedWorkout) => ({
+    ...(existingById.get(seedWorkout.id) || {}),
+    ...seedWorkout,
+    id: seedWorkout.id
+  }));
+  const extras = existingWorkouts.filter((workout) => !workouts.some((seed) => seed.id === workoutKey(workout)));
+  return [...synced, ...extras];
+}
+
 async function ensureStore() {
   await fs.mkdir(dataDir, { recursive: true });
   try {
@@ -149,8 +164,9 @@ async function updateUser(id, updater) {
 
 async function getWorkouts() {
   const db = await readStore();
-  if (!db.workouts || db.workouts.length === 0) {
-    db.workouts = workouts;
+  const nextWorkouts = syncSeedWorkouts(db.workouts || []);
+  if (JSON.stringify(nextWorkouts) !== JSON.stringify(db.workouts || [])) {
+    db.workouts = nextWorkouts;
     await writeStore(db);
   }
   return db.workouts;

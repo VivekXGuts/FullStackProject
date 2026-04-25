@@ -46,9 +46,10 @@ function renderFilters(workouts) {
 }
 
 function renderWorkouts() {
-  const visible = activeCategory === 'All'
-    ? allWorkouts
-    : allWorkouts.filter((workout) => workout.category === activeCategory);
+  const visible =
+    activeCategory === 'All'
+      ? allWorkouts
+      : allWorkouts.filter((workout) => workout.category === activeCategory);
 
   document.getElementById('workoutGrid').innerHTML = visible
     .map(
@@ -63,7 +64,13 @@ function renderWorkouts() {
           <div class="exercise-preview">
             ${(workout.exercises || [])
               .slice(0, 4)
-              .map((exercise) => `<span class="badge subtle">${exercise}</span>`)
+              .map((exercise) => `<span class="badge subtle">${normalizeExercise(exercise).name}</span>`)
+              .join('')}
+          </div>
+          <div class="exercise-grid">
+            ${(workout.exercises || [])
+              .slice(0, 4)
+              .map((exercise) => renderExerciseCard(exercise, workout.category))
               .join('')}
           </div>
           <div class="program-stats">
@@ -199,6 +206,7 @@ function renderTimer() {
 
   const targetSeconds = workout.duration * 60;
   const percent = Math.min(100, Math.round((elapsedSeconds / targetSeconds) * 100));
+  const exercises = (workout.exercises || []).map((exercise) => normalizeExercise(exercise, workout.category));
 
   document.getElementById('timerWorkoutTitle').textContent = workout.title;
   document.getElementById('timerWorkoutMeta').textContent =
@@ -206,10 +214,12 @@ function renderTimer() {
   document.getElementById('timerElapsed').textContent = formatTimer(elapsedSeconds);
   document.getElementById('timerTarget').textContent = `Target ${workout.duration} min`;
   document.getElementById('timerProgressBar').style.width = `${percent}%`;
-  document.getElementById('timerExerciseList').innerHTML = (workout.exercises || [])
-    .map((exercise) => `<span class="badge">${exercise}</span>`)
+  document.getElementById('timerExerciseList').innerHTML = exercises
+    .map((exercise) => `<span class="badge">${exercise.name}</span>`)
     .join('');
-  document.getElementById('timerDemoLinks').innerHTML = (workout.demoLinks || [])
+  document.getElementById('timerDemoLinks').innerHTML = exercises
+    .flatMap((exercise) => exercise.learnLinks)
+    .slice(0, 4)
     .map(
       (link) =>
         `<a class="demo-link" href="${link.url}" target="_blank" rel="noreferrer">${link.label}</a>`
@@ -225,4 +235,50 @@ function formatTimer(totalSeconds) {
     .toString()
     .padStart(2, '0');
   return `${minutes}:${seconds}`;
+}
+
+function normalizeExercise(exercise, category = 'Strength') {
+  if (typeof exercise === 'string') {
+    return {
+      name: exercise,
+      focus: category,
+      imageUrl: '',
+      learnLinks: []
+    };
+  }
+
+  return {
+    name: exercise?.name || 'Exercise',
+    focus: exercise?.focus || category,
+    imageUrl: exercise?.imageUrl || '',
+    learnLinks: Array.isArray(exercise?.learnLinks) ? exercise.learnLinks : []
+  };
+}
+
+function renderExerciseCard(exercise, category) {
+  const item = normalizeExercise(exercise, category);
+  const links = item.learnLinks.length
+    ? item.learnLinks
+        .map(
+          (link) =>
+            `<a class="demo-link exercise-link" href="${link.url}" target="_blank" rel="noreferrer">${link.label}</a>`
+        )
+        .join('')
+    : '<span class="muted">Demo link coming soon</span>';
+
+  return `
+    <article class="exercise-card">
+      <div class="exercise-visual">
+        <img src="${item.imageUrl}" alt="${item.name}">
+        <div class="exercise-overlay">
+          <span class="exercise-chip">${category}</span>
+          <strong>${item.name}</strong>
+        </div>
+      </div>
+      <div class="exercise-copy">
+        <p class="exercise-focus">${item.focus}</p>
+        <div class="exercise-links">${links}</div>
+      </div>
+    </article>
+  `;
 }
