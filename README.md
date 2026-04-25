@@ -1,195 +1,316 @@
-# Fitness and Wellness Gamification Platform
+# FitQuest - Fitness and Wellness Gamification Platform
 
-FitQuest is a production-ready starter web app for motivating healthy habits with points, levels, badges, streaks, daily challenges, leaderboards, and progress tracking.
+FitQuest is a syllabus-aligned full-stack web project for a 4th semester college submission. It combines workout logging, steps and calories tracking, streaks, badges, live leaderboards, daily challenges, and an admin panel inside a clean modular Node.js + Express + MongoDB architecture.
 
 ## Quick Links
 
 - Repository: [FullStackProject](https://github.com/VivekXGuts/FullStackProject)
-- Frontend: [GitHub Pages](https://vivekxguts.github.io/FullStackProject/)
 - Backend API: [Vercel Health Check](https://full-stack-project-xi-amber.vercel.app/api/health)
 
-## Stack
+## 1. Project Architecture
 
-- Frontend: HTML5, CSS3, vanilla JavaScript
-- Backend: Node.js, Express.js
-- Database: MongoDB when `MONGODB_URI` is configured, JSON datastore fallback when it is not
-- Auth: bcrypt password hashing and JWT bearer tokens
+- Frontend: HTML5, CSS3, semantic layouts, forms, Flexbox, CSS Grid, responsive design, vanilla JavaScript
+- Backend: Node.js, Express.js, native `http` module, middleware, JWT auth, RBAC, Socket.IO
+- Database: MongoDB with Mongoose, CRUD operations, challenge/user pagination
+- Tooling: npm, Git, GitHub, ESLint, Prettier
 
-## Features
+### Syllabus Concepts Demonstrated
 
-- Signup, login, logout, and protected API routes
-- Hashed passwords with `bcryptjs`
-- JWT authentication middleware
-- Dashboard with daily goal, points, streak, badges, level progress, leaderboard rank, weekly progress, and activity history
-- Workout programs for Beginner, Intermediate, Advanced, Yoga, Cardio, and Strength training
-- Start and complete workout actions
-- Gamification rewards:
-  - Workout completion: 50 points
-  - Daily goal completion: 100 points
-  - Streak bonus: 10 points per streak day, capped at 100
-  - Badges: Beginner, Consistency, 7-Day Streak, 1000 Points
-  - Levels: Level 1 at 0, Level 2 at 500, Level 3 at 1000, Level 4 at 2000
-- Daily challenge API and completion flow
-- Leaderboard ranked by points
-- Profile settings for fitness level and daily activity goal
-- Responsive mobile and desktop UI
+- HTML/CSS: semantic sections, forms, selectors, box model, Flexbox, Grid, responsive layout
+- JavaScript: arrays, objects, DOM manipulation, event handling, modules-like organization, arrow functions, closures
+- Advanced JS: promises, `async/await`, fetch API, event loop-friendly async flows
+- Node.js: native `http.createServer`, npm modules, `EventEmitter`, callbacks through middleware/event flows
+- Express: routers, GET/POST/PATCH routes, middleware, error handling, validation
+- Socket.IO: live leaderboard updates and challenge notifications
+- MongoDB: collections for users, workouts, challenges; CRUD and pagination
+- Security: JWT authentication, role-based access control, Helmet security headers, rate limiting
 
-## Project Structure
+## 2. Folder Structure
 
 ```text
 fitness-gamification-platform
-+-- frontend
-|   +-- index.html
-|   +-- login.html
-|   +-- signup.html
-|   +-- dashboard.html
-|   +-- leaderboard.html
-|   +-- workouts.html
-|   +-- profile.html
-|   +-- css
-|   |   +-- styles.css
-|   +-- js
-|       +-- api.js
-|       +-- auth.js
-|       +-- dashboard.js
-|       +-- workouts.js
-|       +-- leaderboard.js
-|       +-- profile.js
-+-- backend
-|   +-- server.js
-|   +-- routes
-|   |   +-- auth.js
-|   |   +-- workouts.js
-|   |   +-- leaderboard.js
-|   +-- models
-|   |   +-- User.js
-|   |   +-- Workout.js
-|   +-- middleware
-|   |   +-- authMiddleware.js
-|   +-- services
-|   |   +-- gamification.js
-|   +-- data
-|       +-- challenges.js
-|       +-- jsonStore.js
-|       +-- mongoStore.js
-|       +-- seed.js
-|       +-- store.js
-|       +-- workouts.js
-+-- package.json
-+-- README.md
+├── backend
+│   ├── app.js
+│   ├── server.js
+│   ├── data
+│   │   ├── challenges.js
+│   │   ├── jsonStore.js
+│   │   ├── mongoStore.js
+│   │   ├── seed.js
+│   │   ├── store.js
+│   │   └── workouts.js
+│   ├── middleware
+│   │   ├── authMiddleware.js
+│   │   ├── requireRole.js
+│   │   └── validate.js
+│   ├── models
+│   │   ├── Challenge.js
+│   │   ├── User.js
+│   │   └── Workout.js
+│   ├── routes
+│   │   ├── admin.js
+│   │   ├── auth.js
+│   │   ├── leaderboard.js
+│   │   ├── tracking.js
+│   │   └── workouts.js
+│   └── services
+│       ├── activityEvents.js
+│       └── gamification.js
+├── frontend
+│   ├── admin.html
+│   ├── dashboard.html
+│   ├── index.html
+│   ├── leaderboard.html
+│   ├── login.html
+│   ├── profile.html
+│   ├── signup.html
+│   ├── workouts.html
+│   ├── css
+│   │   └── styles.css
+│   └── js
+│       ├── admin.js
+│       ├── api.js
+│       ├── auth.js
+│       ├── config.js
+│       ├── dashboard.js
+│       ├── leaderboard.js
+│       ├── profile.js
+│       └── workouts.js
+├── .env.example
+├── .gitignore
+├── .prettierrc
+├── eslint.config.js
+├── package.json
+├── Procfile
+├── render.yaml
+├── server.js
+└── vercel.json
 ```
 
-## Run Locally
+## 3. Core Features
 
-```bash
-npm install
-copy .env.example .env
-npm start
-```
+- User registration and login
+- JWT-based authentication
+- RBAC with `admin` and `user`
+- Workout completion and history
+- Daily steps and calories tracking
+- Streak calculation and level progression
+- Badges and achievements
+- Daily challenge system plus admin-created challenge gallery
+- Live leaderboard and challenge updates with Socket.IO
+- Admin panel for users, roles, overview metrics, and challenge CRUD
 
-Open `http://localhost:3000`.
+## 4. MongoDB Models
 
-The app works without MongoDB by storing data in `backend/data/local/db.json`. To use MongoDB, set `MONGODB_URI` in `.env` before starting the server.
+### User
 
-## MongoDB Atlas Setup
+- `username`
+- `email`
+- `password`
+- `role`
+- `fitnessLevel`
+- `points`
+- `level`
+- `badges`
+- `streak`
+- `dailyLogs`
+- `completedWorkouts`
+- `completedChallenges`
+- `pointsHistory`
+- `activityHistory`
 
-Use your Atlas connection string only as an environment variable. Do not commit it.
+### Workout
 
-```bash
-MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/fitness_gamification_platform?retryWrites=true&w=majority
-JWT_SECRET=<long-random-secret>
-CLIENT_ORIGINS=http://localhost:3000
-```
+- `title`
+- `description`
+- `category`
+- `duration`
+- `difficulty`
+- `calories`
 
-In Atlas, make sure your database user has read/write permissions and your deployment host IP is allowed in Network Access. For quick testing you can allow access from anywhere, but a restricted host IP is better for production.
+### Challenge
 
-## Deploy With GitHub
+- `title`
+- `description`
+- `points`
+- `category`
+- `goalType`
+- `difficulty`
+- `isActive`
+- `createdBy`
 
-This repository is ready to push to GitHub. The frontend can deploy to GitHub Pages through `.github/workflows/pages.yml`.
+## 5. API Routes
 
-GitHub Pages hosts static files only, so the Express backend still needs a Node hosting provider such as Render, Railway, Fly.io, or a VPS. A `render.yaml` and `Procfile` are included so the backend can be deployed from the same GitHub repository.
-
-### Backend Environment Variables
-
-Set these in your backend host dashboard:
-
-```bash
-NODE_ENV=production
-MONGODB_URI=<your MongoDB Atlas connection string>
-JWT_SECRET=<long-random-secret>
-CLIENT_ORIGINS=https://<your-github-username>.github.io
-```
-
-After the backend is live, update `frontend/js/config.js`:
-
-```js
-window.FITQUEST_CONFIG = {
-  API_BASE_URL: 'https://<your-backend-domain>/api'
-};
-```
-
-Commit and push that change so GitHub Pages uses the deployed API.
-
-### Deploy Backend on Vercel
-
-The repository now includes a root-level `server.js` so Vercel can detect the Express app correctly.
-
-1. Import the GitHub repository into Vercel.
-2. Keep the project root as the repository root.
-3. Add these environment variables in Vercel:
-   - `MONGODB_URI`
-   - `JWT_SECRET`
-   - `NODE_ENV=production`
-   - `CLIENT_ORIGINS=https://<your-github-username>.github.io`
-4. Deploy.
-5. Test `https://<your-vercel-domain>/api/health`.
-
-After the backend deploy succeeds, update `frontend/js/config.js` with:
-
-```js
-window.FITQUEST_CONFIG = {
-  API_BASE_URL: 'https://<your-vercel-domain>/api'
-};
-```
-
-### GitHub Push
-
-```bash
-git init
-git add .
-git commit -m "Prepare FitQuest for deployment"
-git branch -M main
-git remote add origin https://github.com/<your-github-username>/<your-repo-name>.git
-git push -u origin main
-```
-
-Then open the GitHub repository settings, enable Pages with GitHub Actions, and let the included workflow publish the `frontend` folder.
-
-## REST API
-
-### Auth
+### Authentication
 
 - `POST /api/auth/signup`
 - `POST /api/auth/login`
 - `GET /api/auth/me`
 - `PATCH /api/auth/profile`
 
-### Workouts and Challenges
+### Fitness Tracking
 
 - `GET /api/workouts`
 - `POST /api/workouts/:id/start`
 - `POST /api/workouts/:id/complete`
+- `POST /api/tracking/daily-log`
+- `GET /api/tracking/summary`
+
+### Challenges and Leaderboards
+
+- `GET /api/workouts/challenges`
 - `GET /api/workouts/challenges/daily`
 - `POST /api/workouts/challenges/:id/complete`
-
-### Leaderboard
-
 - `GET /api/leaderboard`
 
-## Production Notes
+### Admin (RBAC Protected)
 
-- Set a strong `JWT_SECRET`.
-- Configure `MONGODB_URI` for durable multi-user persistence.
-- Serve behind HTTPS in production.
-- Restrict `CLIENT_ORIGIN` to the deployed frontend origin.
-- Consider replacing the JSON fallback with MongoDB-only storage for horizontally scaled deployments.
+- `GET /api/admin/overview`
+- `GET /api/admin/users?page=1&limit=6`
+- `PATCH /api/admin/users/:id/role`
+- `GET /api/admin/challenges?page=1&limit=4`
+- `POST /api/admin/challenges`
+- `PATCH /api/admin/challenges/:id`
+
+## 6. Socket.IO Features
+
+- `leaderboard:update` emitted when workouts/logs/challenges change rankings
+- `challenge:completed` emitted when a user completes a challenge
+- `challenge:created` emitted when an admin publishes a challenge
+
+### Why this matters for the syllabus
+
+This demonstrates realtime communication beyond normal REST routes and makes the project stronger in a demo presentation.
+
+## 7. Security
+
+- Password hashing with `bcryptjs`
+- JWT authentication
+- RBAC middleware for admin-only actions
+- Helmet security headers
+- Express rate limiting
+- Config-driven CORS handling
+
+## 8. Best Features Borrowed from Research
+
+Inspired by Strava, Peloton, Nike Training Club, ZRX, and MyFitnessPal, this project now includes:
+
+- Public challenge gallery
+- Daily logging for steps and calories
+- Live leaderboard pulse
+- Admin-managed challenge publishing
+- Realtime community feed updates
+- Better progression and role-based management
+
+## 9. Frontend Notes
+
+- Uses semantic HTML and responsive CSS
+- Demonstrates forms and input controls clearly
+- Uses DOM manipulation and event listeners on every major page
+- Uses arrays/objects to render leaderboard rows, charts, badges, and activity history
+- Uses a closure in `frontend/js/api.js` for realtime channel creation
+
+## 10. How to Run
+
+### Install
+
+```bash
+npm install
+copy .env.example .env
+```
+
+### Development
+
+```bash
+npm run dev
+```
+
+### Production-style local run
+
+```bash
+npm start
+```
+
+Open:
+
+- `http://localhost:3000`
+
+## 11. MongoDB Setup
+
+Set your Atlas connection string in `.env`:
+
+```bash
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/fitness_gamification_platform?retryWrites=true&w=majority
+JWT_SECRET=<long-random-secret>
+ADMIN_CODE=fitquest-admin-demo
+CLIENT_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+```
+
+If `MONGODB_URI` is missing, the app falls back to JSON storage for local demos.
+
+## 12. Admin Demo Setup
+
+To create an admin account from the signup page:
+
+- enter the optional **Admin access code**
+- the code must match `ADMIN_CODE` in `.env`
+
+Example:
+
+```bash
+ADMIN_CODE=fitquest-admin-demo
+```
+
+## 13. npm Commands
+
+```bash
+npm install
+npm run dev
+npm start
+npm run seed
+npm run lint
+npm run format
+```
+
+## 14. GitHub Commit Structure
+
+Suggested college-friendly commit flow:
+
+```text
+feat: scaffold frontend and backend structure
+feat: add JWT authentication and MongoDB models
+feat: implement workout tracking and gamification logic
+feat: add leaderboard and daily challenges
+feat: add admin panel with RBAC and pagination
+feat: integrate Socket.IO live updates
+chore: add eslint prettier and documentation
+```
+
+## 15. REPL / Node.js Viva Notes
+
+If your faculty asks about Node REPL:
+
+```bash
+node
+> 2 + 2
+> const nums = [1,2,3]
+> nums.map(n => n * 2)
+```
+
+If they ask where the `http` module is used:
+
+- `backend/server.js` uses `http.createServer(app)` to wrap the Express app for Socket.IO.
+
+If they ask where `EventEmitter` is used:
+
+- `backend/services/activityEvents.js`
+- Route handlers emit events, and the server forwards them to Socket.IO clients.
+
+## 16. Submission Summary
+
+This project is suitable for:
+
+- college submission
+- viva/demo presentation
+- GitHub portfolio
+- future expansion into a production-ready fitness SaaS

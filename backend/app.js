@@ -11,6 +11,8 @@ const { connectDatabase, isMongoActive } = require('./data/store');
 const authRoutes = require('./routes/auth');
 const workoutRoutes = require('./routes/workouts');
 const leaderboardRoutes = require('./routes/leaderboard');
+const trackingRoutes = require('./routes/tracking');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 const frontendPath = path.join(__dirname, '..', 'frontend');
@@ -120,12 +122,15 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/workouts', workoutRoutes);
+app.use('/api/tracking', trackingRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/profile', (req, res) => res.sendFile(path.join(frontendPath, 'profile.html')));
 app.get('/dashboard', (req, res) => res.sendFile(path.join(frontendPath, 'dashboard.html')));
 app.get('/workouts', (req, res) => res.sendFile(path.join(frontendPath, 'workouts.html')));
 app.get('/leaderboard', (req, res) => res.sendFile(path.join(frontendPath, 'leaderboard.html')));
+app.get('/admin', (req, res) => res.sendFile(path.join(frontendPath, 'admin.html')));
 
 app.use((req, res) => {
   if (req.path.startsWith('/api')) {
@@ -134,7 +139,7 @@ app.use((req, res) => {
   return res.status(404).sendFile(path.join(frontendPath, 'index.html'));
 });
 
-app.use((error, req, res, next) => {
+app.use((error, req, res, _next) => {
   console.error(error);
   res.status(error.status || 500).json({
     message: error.message || 'Something went wrong.'

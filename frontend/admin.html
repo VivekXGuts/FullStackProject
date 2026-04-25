@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | FitQuest</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="dashboard.html"><span class="brand-mark">FQ</span>FitQuest</a>
+      <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="workouts.html">Workouts</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="profile.html">Profile</a>
+        <a class="is-active" href="admin.html">Admin</a>
+        <button class="ghost-link" data-logout>Logout</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="section-heading">
+      <div>
+        <p class="eyebrow">Admin and moderation</p>
+        <h1>Admin panel</h1>
+        <p class="muted">Manage users, publish challenges, and monitor leaderboard momentum.</p>
+      </div>
+    </section>
+
+    <p id="adminMessage" class="form-message"></p>
+
+    <section id="adminMetrics" class="stats-grid"></section>
+
+    <section class="dashboard-grid">
+      <article class="panel">
+        <h2>Create challenge</h2>
+        <form id="challengeForm" class="form-grid">
+          <label>Title
+            <input type="text" name="title" required>
+          </label>
+          <label>Description
+            <input type="text" name="description" required>
+          </label>
+          <label>Points
+            <input type="number" name="points" min="10" max="500" required>
+          </label>
+          <label>Category
+            <select name="category">
+              <option>Strength</option>
+              <option>Cardio</option>
+              <option>Wellness</option>
+              <option>Yoga</option>
+              <option>Mindset</option>
+              <option>Steps</option>
+            </select>
+          </label>
+          <label>Goal type
+            <select name="goalType">
+              <option>daily</option>
+              <option>weekly</option>
+              <option>steps</option>
+              <option>calories</option>
+              <option>mindfulness</option>
+              <option>custom</option>
+            </select>
+          </label>
+          <label>Difficulty
+            <select name="difficulty">
+              <option>Easy</option>
+              <option>Medium</option>
+              <option>Hard</option>
+            </select>
+          </label>
+          <button class="btn primary" type="submit">Publish Challenge</button>
+        </form>
+      </article>
+
+      <article class="panel">
+        <h2>Leaderboard monitor</h2>
+        <p id="topPerformer" class="muted">Loading leaderboard pulse.</p>
+      </article>
+
+      <article class="panel wide">
+        <div class="section-heading">
+          <div>
+            <h2>Manage users</h2>
+            <p class="muted">RBAC demo with admin/user switching and paginated results.</p>
+          </div>
+          <div class="section-actions">
+            <button id="usersPrev" class="btn secondary" type="button">Prev</button>
+            <span id="userPageLabel" class="muted">1/1</span>
+            <button id="usersNext" class="btn secondary" type="button">Next</button>
+          </div>
+        </div>
+        <div id="adminUsers" class="timeline"></div>
+      </article>
+
+      <article class="panel wide">
+        <div class="section-heading">
+          <div>
+            <h2>Challenge gallery</h2>
+            <p class="muted">Public challenge gallery inspired by modern fitness apps.</p>
+          </div>
+          <div class="section-actions">
+            <button id="challengesPrev" class="btn secondary" type="button">Prev</button>
+            <span id="challengePageLabel" class="muted">1/1</span>
+            <button id="challengesNext" class="btn secondary" type="button">Next</button>
+          </div>
+        </div>
+        <div id="adminChallenges" class="program-grid"></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="js/config.js?v=20260424"></script>
+  <script src="js/api.js?v=20260424"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

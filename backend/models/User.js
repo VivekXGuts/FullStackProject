@@ -42,6 +42,17 @@ const challengeSchema = new mongoose.Schema(
   { _id: false }
 );
 
+const dailyLogSchema = new mongoose.Schema(
+  {
+    date: { type: Date, default: Date.now },
+    steps: { type: Number, default: 0 },
+    caloriesBurned: { type: Number, default: 0 },
+    minutesActive: { type: Number, default: 0 },
+    mood: { type: String, default: 'Focused' }
+  },
+  { _id: false }
+);
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -59,6 +70,11 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true
     },
+    role: {
+      type: String,
+      enum: ['admin', 'user'],
+      default: 'user'
+    },
     password: { type: String, required: true },
     fitnessLevel: {
       type: String,
@@ -73,6 +89,7 @@ const userSchema = new mongoose.Schema(
     lastActivityDate: { type: String, default: null },
     completedWorkouts: { type: [completedWorkoutSchema], default: [] },
     completedChallenges: { type: [challengeSchema], default: [] },
+    dailyLogs: { type: [dailyLogSchema], default: [] },
     pointsHistory: { type: [pointsHistorySchema], default: [] },
     activityHistory: { type: [activitySchema], default: [] },
     dailyGoal: { type: Number, default: 2 }

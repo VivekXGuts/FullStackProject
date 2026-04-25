@@ -2,12 +2,30 @@ requireAuth();
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
+    const connectRealtime = createRealtimeChannel({
+      'challenge:completed': (payload) => {
+        const message = `${payload.username} completed "${payload.title}" for ${payload.points} points.`;
+        renderRealtimeMessage(message);
+      },
+      'leaderboard:update': ({ leaderboard }) => {
+        const topEntry = leaderboard[0];
+        if (topEntry) {
+          document.getElementById('rankInsight').textContent =
+            `${topEntry.username} is leading with ${topEntry.points} points.`;
+        }
+      }
+    });
+
     const [{ user, metrics }, challengePayload] = await Promise.all([
-      apiFetch('/auth/me'),
+      apiFetch('/tracking/summary'),
       apiFetch('/workouts/challenges/daily')
     ]);
 
+    setCurrentUser(user);
+    renderAdminLinks(user);
     renderDashboard(user, metrics, challengePayload);
+    await connectRealtime();
+    wireDailyLogForm();
   } catch (error) {
     showMessage('dashboardMessage', error.message);
   }
@@ -29,6 +47,7 @@ function renderDashboard(user, metrics, { challenge, completed }) {
   document.getElementById('challengeTitle').textContent = challenge.title;
   document.getElementById('challengeDescription').textContent = challenge.description;
   document.getElementById('challengePoints').textContent = `+${challenge.points} pts`;
+  document.getElementById('rankInsight').textContent = `You are currently ranked #${metrics.rank || '-'}.`;
 
   const challengeButton = document.getElementById('completeChallenge');
   challengeButton.disabled = completed;
@@ -46,6 +65,7 @@ function renderDashboard(user, metrics, { challenge, completed }) {
 
   renderWeeklyProgress(metrics.weeklyProgress);
   renderActivityHistory(user.activityHistory || []);
+  renderDailyLogs(user.dailyLogs || []);
 }
 
 function renderWeeklyProgress(weeklyProgress) {
@@ -80,4 +100,55 @@ function renderActivityHistory(history) {
       `
     )
     .join('');
+}
+
+function renderDailyLogs(dailyLogs) {
+  const container = document.getElementById('dailyLogHistory');
+  if (!dailyLogs.length) {
+    container.innerHTML = '<p class="muted">No daily logs yet. Add steps and calories to build your streak.</p>';
+    return;
+  }
+
+  container.innerHTML = dailyLogs
+    .slice(0, 5)
+    .map(
+      (log) => `
+        <article class="timeline-item">
+          <div>
+            <strong>${log.steps} steps • ${log.caloriesBurned} calories</strong>
+            <span>${formatDate(log.date)} • ${log.minutesActive || 0} active min • ${log.mood}</span>
+          </div>
+          <b>Log</b>
+        </article>
+      `
+    )
+    .join('');
+}
+
+function wireDailyLogForm() {
+  const form = document.getElementById('dailyLogForm');
+  if (!form) return;
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const payload = Object.fromEntries(new FormData(form).entries());
+    try {
+      await apiFetch('/tracking/daily-log', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+      showMessage('dashboardMessage', 'Daily log saved. Your points and streak are updated.', 'success');
+      location.reload();
+    } catch (error) {
+      showMessage('dashboardMessage', error.message);
+    }
+  });
+}
+
+function renderRealtimeMessage(message) {
+  const container = document.getElementById('realtimeUpdates');
+  const item = document.createElement('article');
+  item.className = 'timeline-item';
+  item.innerHTML = `<div><strong>Live update</strong><span>${message}</span></div><b>Now</b>`;
+  container.prepend(item);
 }

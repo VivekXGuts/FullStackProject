@@ -1,6 +1,7 @@
 const configuredApiBase = window.FITQUEST_CONFIG?.API_BASE_URL?.trim();
 const API_BASE = configuredApiBase || 'https://full-stack-project-xi-amber.vercel.app/api';
 const TOKEN_KEY = 'fitquest_token';
+const USER_KEY = 'fitquest_user';
 
 function getToken() {
   return localStorage.getItem(TOKEN_KEY);
@@ -12,6 +13,19 @@ function setToken(token) {
 
 function clearToken() {
   localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+}
+
+function getCurrentUser() {
+  try {
+    return JSON.parse(localStorage.getItem(USER_KEY) || 'null');
+  } catch {
+    return null;
+  }
+}
+
+function setCurrentUser(user) {
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
 }
 
 async function apiFetch(path, options = {}) {
@@ -87,4 +101,45 @@ function progressBar(percent) {
   return `<div class="progress"><span style="width:${safePercent}%"></span></div>`;
 }
 
+function getApiOrigin() {
+  return API_BASE.replace(/\/api$/, '');
+}
+
+async function ensureSocketClient() {
+  if (window.io) return window.io;
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = `${getApiOrigin()}/socket.io/socket.io.js`;
+    script.onload = () => resolve(window.io);
+    script.onerror = () => reject(new Error('Realtime client could not be loaded.'));
+    document.head.appendChild(script);
+  });
+}
+
+// Closure demo: the returned function keeps access to the socket callbacks.
+function createRealtimeChannel(handlers = {}) {
+  return async function connect() {
+    try {
+      const socketFactory = await ensureSocketClient();
+      const socket = socketFactory(getApiOrigin(), { transports: ['websocket', 'polling'] });
+
+      Object.entries(handlers).forEach(([eventName, handler]) => {
+        socket.on(eventName, handler);
+      });
+
+      return socket;
+    } catch (_error) {
+      return null;
+    }
+  };
+}
+
+function renderAdminLinks(user = getCurrentUser()) {
+  document.querySelectorAll('[data-admin-link]').forEach((link) => {
+    link.hidden = !user || user.role !== 'admin';
+  });
+}
+
 wireLogoutButtons();
+renderAdminLinks();

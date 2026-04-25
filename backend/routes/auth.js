@@ -11,7 +11,8 @@ function createToken(user) {
   return jwt.sign(
     {
       id: user.id || String(user._id),
-      email: user.email
+      email: user.email,
+      role: user.role || 'user'
     },
     process.env.JWT_SECRET || 'change-this-secret-in-production',
     { expiresIn: '7d' }
@@ -37,11 +38,14 @@ router.post('/signup', validateSignup, async (req, res, next) => {
     const { username, email, password, fitnessLevel } = req.body;
     const hashedPassword = await bcrypt.hash(password, 12);
     const store = getStore();
+    const role =
+      req.body.adminCode && req.body.adminCode === process.env.ADMIN_CODE ? 'admin' : 'user';
     const user = await store.createUser({
       username,
       email,
       password: hashedPassword,
-      fitnessLevel
+      fitnessLevel,
+      role
     });
 
     res.status(201).json({

@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify(payload)
       });
       setToken(result.token);
+      setCurrentUser(result.user);
       location.href = '/dashboard.html';
     } catch (error) {
       showMessage('signupMessage', error.message);
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify(payload)
       });
       setToken(result.token);
+      setCurrentUser(result.user);
       location.href = '/dashboard.html';
     } catch (error) {
       showMessage('loginMessage', error.message);

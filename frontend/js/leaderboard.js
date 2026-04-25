@@ -2,6 +2,9 @@ requireAuth();
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
+    const summary = await apiFetch('/tracking/summary');
+    setCurrentUser(summary.user);
+    renderAdminLinks(summary.user);
     const { leaderboard } = await apiFetch('/leaderboard');
     renderLeaderboard(leaderboard);
   } catch (error) {

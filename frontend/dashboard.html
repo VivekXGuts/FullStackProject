@@ -27,7 +27,10 @@
         <h1>Hi, <span id="welcomeName">athlete</span></h1>
         <p class="muted">Today's progress, rewards, and training history.</p>
       </div>
-      <a class="btn primary" href="workouts.html">Find Workout</a>
+      <div class="section-actions">
+        <a class="btn secondary" data-admin-link hidden href="admin.html">Admin</a>
+        <a class="btn primary" href="workouts.html">Find Workout</a>
+      </div>
     </section>
 
     <p id="dashboardMessage" class="form-message"></p>
@@ -60,6 +63,7 @@
         <h2>Level progress</h2>
         <div id="levelProgress"></div>
         <p id="levelText" class="muted"></p>
+        <p id="rankInsight" class="muted"></p>
       </article>
 
       <article class="panel">
@@ -75,6 +79,42 @@
       <article class="panel wide">
         <h2>Activity history</h2>
         <div id="activityHistory" class="timeline"></div>
+      </article>
+
+      <article class="panel">
+        <h2>Daily tracking log</h2>
+        <form id="dailyLogForm" class="form-grid">
+          <label>Steps
+            <input type="number" name="steps" min="0" required>
+          </label>
+          <label>Calories burned
+            <input type="number" name="caloriesBurned" min="0" required>
+          </label>
+          <label>Minutes active
+            <input type="number" name="minutesActive" min="0">
+          </label>
+          <label>Mood
+            <select name="mood">
+              <option>Focused</option>
+              <option>Energetic</option>
+              <option>Calm</option>
+              <option>Proud</option>
+            </select>
+          </label>
+          <button class="btn primary" type="submit">Save Daily Log</button>
+        </form>
+      </article>
+
+      <article class="panel">
+        <h2>Recent daily logs</h2>
+        <div id="dailyLogHistory" class="timeline"></div>
+      </article>
+
+      <article class="panel wide">
+        <h2>Realtime community feed</h2>
+        <div id="realtimeUpdates" class="timeline">
+          <p class="muted">Waiting for live leaderboard and challenge updates.</p>
+        </div>
       </article>
     </section>
   </main>

@@ -1,8 +1,8 @@
 const express = require('express');
 const authMiddleware = require('../middleware/authMiddleware');
 const { getStore } = require('../data/store');
-const { getDailyChallenge } = require('../data/challenges');
 const { applyActivity } = require('../services/gamification');
+const activityEvents = require('../services/activityEvents');
 
 const router = express.Router();
 
@@ -81,24 +81,45 @@ router.post('/:id/complete', authMiddleware, async (req, res, next) => {
       user: store.publicUser(updated),
       rewards: updated.rewards
     });
+
+    const leaderboard = await store.getLeaderboard(10);
+    activityEvents.emitLeaderboardUpdate({ leaderboard });
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/challenges/daily', authMiddleware, (req, res) => {
-  const challenge = getDailyChallenge();
-  const today = new Date().toISOString().slice(0, 10);
-  const completed = (req.user.completedChallenges || []).some(
-    (item) => item.challengeId === challenge.id && isDateKey(item.completedAt, today)
-  );
-  res.json({ challenge, completed });
+router.get('/challenges', authMiddleware, async (req, res, next) => {
+  try {
+    const page = Number(req.query.page) || 1;
+    const limit = Math.min(12, Number(req.query.limit) || 6);
+    const challenges = await getStore().getChallenges({ page, limit });
+    res.json(challenges);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/challenges/daily', authMiddleware, async (req, res, next) => {
+  try {
+    const challenge = await getStore().getDailyChallenge();
+    if (!challenge) {
+      return res.status(404).json({ message: 'No challenge is currently available.' });
+    }
+    const today = new Date().toISOString().slice(0, 10);
+    const completed = (req.user.completedChallenges || []).some(
+      (item) => item.challengeId === challenge.id && isDateKey(item.completedAt, today)
+    );
+    res.json({ challenge, completed });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post('/challenges/:id/complete', authMiddleware, async (req, res, next) => {
   try {
-    const challenge = getDailyChallenge();
-    if (req.params.id !== challenge.id) {
+    const challenge = await getStore().getDailyChallenge();
+    if (!challenge || req.params.id !== challenge.id) {
       return res.status(404).json({ message: 'That challenge is not active today.' });
     }
 
@@ -138,6 +159,14 @@ router.post('/challenges/:id/complete', authMiddleware, async (req, res, next) =
       message: 'Daily challenge completed.',
       user: store.publicUser(updated),
       rewards: updated.rewards
+    });
+
+    const leaderboard = await store.getLeaderboard(10);
+    activityEvents.emitLeaderboardUpdate({ leaderboard });
+    activityEvents.emitChallengeCompleted({
+      username: updated.username,
+      title: challenge.title,
+      points: challenge.points
     });
   } catch (error) {
     next(error);

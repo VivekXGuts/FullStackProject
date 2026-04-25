@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     const { user, metrics } = await apiFetch('/auth/me');
+    setCurrentUser(user);
+    renderAdminLinks(user);
     document.getElementById('profileName').textContent = user.username;
     document.getElementById('profileEmail').textContent = user.email;
     document.getElementById('profileBadges').innerHTML = badgeMarkup(user.badges);
