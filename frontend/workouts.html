@@ -27,11 +27,36 @@
         <h1>Workout programs</h1>
         <p class="muted">Beginner, intermediate, advanced, yoga, cardio, and strength training.</p>
       </div>
+      <a class="btn secondary" data-admin-link hidden href="admin.html">Admin</a>
     </section>
 
     <div id="workoutFilters" class="filter-row"></div>
     <p id="workoutsMessage" class="form-message"></p>
     <section id="workoutGrid" class="program-grid"></section>
+
+    <section id="workoutTimerPanel" class="panel timer-panel" hidden>
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Workout timer</p>
+          <h2 id="timerWorkoutTitle">Workout in progress</h2>
+          <p id="timerWorkoutMeta" class="muted"></p>
+        </div>
+        <div class="section-actions">
+          <button id="pauseTimerButton" class="btn secondary" type="button">Pause</button>
+          <button id="resetTimerButton" class="btn secondary" type="button">Reset</button>
+          <button id="completeTimerButton" class="btn primary" type="button">Complete Workout</button>
+        </div>
+      </div>
+      <div class="timer-display">
+        <strong id="timerElapsed">00:00</strong>
+        <span id="timerTarget" class="muted">Target 0 min</span>
+      </div>
+      <div class="progress">
+        <span id="timerProgressBar" style="width: 0%"></span>
+      </div>
+      <div id="timerExerciseList" class="badge-row"></div>
+      <div id="timerDemoLinks" class="demo-links"></div>
+    </section>
   </main>
 
   <script src="js/config.js?v=20260424"></script>
