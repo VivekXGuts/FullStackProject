@@ -14,22 +14,16 @@ router.post('/daily-log', authMiddleware, validate(['steps', 'caloriesBurned']),
     const mood = String(req.body.mood || 'Focused');
     const minutes = Number(req.body.minutesActive || 0);
     const sleepHours = Number(req.body.sleepHours || 0);
-    const recoveryRate = Number(req.body.recoveryRate || 0);
 
     if (Number.isNaN(steps) || Number.isNaN(caloriesBurned) || steps < 0 || caloriesBurned < 0) {
       return res.status(400).json({ message: 'Steps and calories burned must be valid numbers.' });
     }
 
-    if (
-      Number.isNaN(sleepHours) ||
-      Number.isNaN(recoveryRate) ||
-      sleepHours < 0 ||
-      sleepHours > 24 ||
-      recoveryRate < 0 ||
-      recoveryRate > 100
-    ) {
-      return res.status(400).json({ message: 'Sleep hours and recovery rate must be valid values.' });
+    if (Number.isNaN(sleepHours) || sleepHours < 0 || sleepHours > 24) {
+      return res.status(400).json({ message: 'Sleep hours must be a valid value.' });
     }
+
+    const recoveryRate = calculateRecoveryRate({ sleepHours, minutes, caloriesBurned });
 
     const basePoints = Math.min(
       180,
@@ -97,3 +91,15 @@ router.get('/summary', authMiddleware, async (req, res, next) => {
 });
 
 module.exports = router;
+
+function calculateRecoveryRate({ sleepHours, minutes, caloriesBurned }) {
+  const sleepScore = Math.min(70, Math.round((sleepHours / 8) * 70));
+  const movementScore = Math.min(20, Math.round(Math.min(minutes, 90) / 4.5));
+  let calorieScore = 10;
+
+  if (caloriesBurned < 150) calorieScore = 4;
+  if (caloriesBurned > 900) calorieScore = 6;
+  if (sleepHours < 5) calorieScore = Math.max(2, calorieScore - 3);
+
+  return Math.max(25, Math.min(100, sleepScore + movementScore + calorieScore));
+}

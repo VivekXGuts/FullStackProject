@@ -186,7 +186,7 @@ function wireDailyLogForm() {
       });
       showMessage(
         'dashboardMessage',
-        'Daily log saved. Sleep, recovery, and activity points are updated.',
+        'Daily log saved. Recovery was calculated automatically from your sleep and activity.',
         'success'
       );
       location.reload();

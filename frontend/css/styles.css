@@ -122,8 +122,8 @@ select {
   display: grid;
   align-items: end;
   background:
-    linear-gradient(90deg, rgba(9, 35, 28, 0.78), rgba(9, 35, 28, 0.18)),
-    url("https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1800&q=80") center/cover;
+    linear-gradient(90deg, rgba(3, 8, 10, 0.84), rgba(3, 8, 10, 0.52), rgba(3, 8, 10, 0.18)),
+    url("../images/david-goggins-hero.jpg") 72% center/cover;
   color: white;
 }
 
@@ -175,6 +175,11 @@ h3 {
   max-width: 620px;
   color: #e9fff5;
   font-size: 1.12rem;
+}
+
+.hero h1 {
+  color: white;
+  text-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
 }
 
 .hero-actions,
