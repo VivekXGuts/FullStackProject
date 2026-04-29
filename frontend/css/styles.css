@@ -1,18 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap");
 
 :root {
-  --ink: #0d1b20;
-  --muted: #4f626d;
+  --ink: #0b1820;
+  --muted: #506573;
   --surface: #ffffff;
-  --surface-soft: #f3f7f4;
-  --line: #dce6df;
-  --green: #159a6e;
-  --green-dark: #0d6e50;
-  --coral: #ff6b5f;
-  --gold: #f6b73c;
-  --blue: #236ad4;
-  --violet: #7457d9;
-  --shadow: 0 18px 45px rgba(23, 33, 38, 0.12);
+  --surface-soft: #eff8f5;
+  --line: #d4e5de;
+  --green: #15a876;
+  --green-dark: #0f7b59;
+  --coral: #ff7668;
+  --gold: #f6bc45;
+  --blue: #2a71e0;
+  --violet: #835df0;
+  --teal: #16b8b0;
+  --shadow: 0 20px 50px rgba(17, 31, 39, 0.12);
   --radius: 8px;
 }
 
@@ -24,7 +25,10 @@ body {
   margin: 0;
   color: var(--ink);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f8fbf8;
+  background:
+    radial-gradient(circle at top left, rgba(42, 113, 224, 0.1), transparent 26%),
+    radial-gradient(circle at top right, rgba(21, 168, 118, 0.1), transparent 30%),
+    linear-gradient(180deg, #f9fcff 0%, #f4fbf7 52%, #eef7f3 100%);
   line-height: 1.5;
 }
 
@@ -103,7 +107,7 @@ select {
 .nav-links a:hover,
 .ghost-link:hover,
 .nav-links a.is-active {
-  background: var(--surface-soft);
+  background: rgba(21, 168, 118, 0.1);
   color: var(--green-dark);
 }
 
@@ -246,7 +250,7 @@ h3 {
 .auth-card {
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 10px 28px rgba(23, 33, 38, 0.06);
 }
 
@@ -724,6 +728,58 @@ select:focus {
   grid-template-columns: 0.9fr 1.1fr;
 }
 
+.profile-page .page-shell {
+  position: relative;
+}
+
+.profile-cover {
+  min-height: 280px;
+  display: flex;
+  align-items: end;
+  margin-bottom: 18px;
+  overflow: hidden;
+  background:
+    linear-gradient(100deg, rgba(4, 23, 31, 0.82), rgba(20, 59, 70, 0.45)),
+    url("https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1600&q=80") center/cover;
+  color: white;
+}
+
+.profile-cover-copy {
+  max-width: 640px;
+}
+
+.profile-cover h2 {
+  color: white;
+  max-width: 520px;
+}
+
+.profile-cover-text {
+  color: rgba(238, 252, 246, 0.88);
+  font-size: 1.03rem;
+}
+
+.goal-summary-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.goal-summary-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-weight: 800;
+}
+
+.goal-summary-pill.subtle {
+  background: rgba(22, 184, 176, 0.22);
+}
+
 .profile-avatar {
   width: 84px;
   height: 84px;
@@ -764,12 +820,105 @@ select:focus {
   color: var(--muted);
 }
 
+.profile-tools-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.section-heading.compact {
+  margin-bottom: 16px;
+}
+
+.goal-card-grid,
+.calculator-grid,
+.calculator-results {
+  display: grid;
+  gap: 12px;
+}
+
+.goal-card-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.goal-card {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(237, 249, 244, 0.9));
+  text-align: left;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.goal-card:hover,
+.goal-card.is-active {
+  transform: translateY(-2px);
+  border-color: rgba(42, 113, 224, 0.28);
+  box-shadow: 0 18px 34px rgba(42, 113, 224, 0.12);
+}
+
+.goal-card span {
+  color: var(--green-dark);
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.goal-card strong {
+  color: #123849;
+}
+
+.goal-card small {
+  color: var(--muted);
+  font-size: 0.93rem;
+}
+
+.calculator-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.calculator-results {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 16px;
+}
+
+.calculator-card {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, #ffffff, #f4fbf7);
+}
+
+.calculator-card span {
+  display: block;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.calculator-card strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--ink);
+  font-size: 1.7rem;
+}
+
+.calculator-card.accent {
+  background: linear-gradient(135deg, rgba(21, 168, 118, 0.14), rgba(42, 113, 224, 0.16));
+  border-color: rgba(42, 113, 224, 0.18);
+}
+
 @media (max-width: 900px) {
   .feature-grid,
   .stats-grid,
   .dashboard-grid,
   .program-grid,
-  .profile-grid {
+  .profile-grid,
+  .profile-tools-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -815,7 +964,11 @@ select:focus {
   .stats-grid,
   .dashboard-grid,
   .program-grid,
-  .profile-grid {
+  .profile-grid,
+  .profile-tools-grid,
+  .goal-card-grid,
+  .calculator-grid,
+  .calculator-results {
     grid-template-columns: 1fr;
   }
 

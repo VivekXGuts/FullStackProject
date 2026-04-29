@@ -6,7 +6,7 @@
   <title>Profile | FitQuest</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body class="profile-page">
   <header class="site-header">
     <nav class="nav">
       <a class="brand" href="dashboard.html"><span class="brand-mark">FQ</span>FitQuest</a>
@@ -25,12 +25,24 @@
       <div>
         <p class="eyebrow">Account</p>
         <h1>Profile</h1>
-        <p class="muted">Fitness level, goal settings, badges, and lifetime totals.</p>
+        <p class="muted">Fitness level, body goal, calorie planning, badges, and lifetime totals.</p>
       </div>
       <a class="btn secondary" data-admin-link hidden href="admin.html">Admin</a>
     </section>
 
     <p id="profileMessage" class="form-message"></p>
+
+    <section class="profile-cover panel">
+      <div class="profile-cover-copy">
+        <p class="eyebrow">Body transformation</p>
+        <h2 id="goalHeadline">Train with a clear destination</h2>
+        <p id="goalDescription" class="profile-cover-text">Set your body goal, keep your calories in check, and use every workout to move closer to your next milestone.</p>
+        <div class="goal-summary-row">
+          <span id="goalBadge" class="goal-summary-pill">Lean & Fit</span>
+          <span id="goalCaloriesHint" class="goal-summary-pill subtle">Calculator ready</span>
+        </div>
+      </div>
+    </section>
 
     <section class="profile-grid">
       <article class="panel">
@@ -51,6 +63,14 @@
               <option>Advanced</option>
             </select>
           </label>
+          <label>Body goal
+            <select name="bodyGoal">
+              <option>Lean &amp; Fit</option>
+              <option>Muscle Gain</option>
+              <option>Fat Loss</option>
+              <option>Endurance</option>
+            </select>
+          </label>
           <label>Daily activity goal
             <input type="number" name="dailyGoal" min="1" max="6" step="1" required>
           </label>
@@ -58,10 +78,74 @@
         </form>
       </article>
     </section>
+
+    <section class="profile-tools-grid">
+      <article class="panel">
+        <div class="section-heading compact">
+          <div>
+            <p class="eyebrow">Goal planner</p>
+            <h2>Choose your target</h2>
+          </div>
+        </div>
+        <div id="goalCards" class="goal-card-grid"></div>
+      </article>
+
+      <article class="panel">
+        <div class="section-heading compact">
+          <div>
+            <p class="eyebrow">Nutrition helper</p>
+            <h2>Calorie calculator</h2>
+          </div>
+        </div>
+        <form id="calorieCalculatorForm" class="form-grid">
+          <div class="calculator-grid">
+            <label>Gender
+              <select name="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </label>
+            <label>Age
+              <input type="number" name="age" min="14" max="80" value="20" required>
+            </label>
+            <label>Weight (kg)
+              <input type="number" name="weight" min="35" max="250" value="70" required>
+            </label>
+            <label>Height (cm)
+              <input type="number" name="height" min="130" max="230" value="170" required>
+            </label>
+            <label>Activity level
+              <select name="activityLevel">
+                <option value="1.2">Sedentary</option>
+                <option value="1.375">Lightly Active</option>
+                <option value="1.55" selected>Moderately Active</option>
+                <option value="1.725">Very Active</option>
+                <option value="1.9">Athlete Level</option>
+              </select>
+            </label>
+          </div>
+          <button class="btn primary" type="submit">Calculate Calories</button>
+        </form>
+        <div id="calorieResults" class="calculator-results">
+          <div class="calculator-card">
+            <span>BMR</span>
+            <strong id="bmrValue">-</strong>
+          </div>
+          <div class="calculator-card">
+            <span>Maintenance</span>
+            <strong id="maintenanceValue">-</strong>
+          </div>
+          <div class="calculator-card accent">
+            <span>Goal target</span>
+            <strong id="goalCaloriesValue">-</strong>
+          </div>
+        </div>
+      </article>
+    </section>
   </main>
 
   <script src="js/config.js?v=20260424"></script>
   <script src="js/api.js?v=20260424"></script>
-  <script src="js/profile.js"></script>
+  <script src="js/profile.js?v=20260430"></script>
 </body>
 </html>

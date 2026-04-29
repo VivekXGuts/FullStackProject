@@ -123,6 +123,7 @@ async function createUser(userInput) {
     role: userInput.role || 'user',
     password: userInput.password,
     fitnessLevel: userInput.fitnessLevel || 'Beginner',
+    bodyGoal: userInput.bodyGoal || 'Lean & Fit',
     points: 0,
     level: 1,
     badges: ['Beginner Badge'],

@@ -99,11 +99,15 @@ router.get('/me', authMiddleware, async (req, res, next) => {
 
 router.patch('/profile', authMiddleware, async (req, res, next) => {
   try {
-    const { fitnessLevel, dailyGoal } = req.body;
+    const { fitnessLevel, dailyGoal, bodyGoal } = req.body;
     const updates = {};
 
     if (fitnessLevel && ['Beginner', 'Intermediate', 'Advanced'].includes(fitnessLevel)) {
       updates.fitnessLevel = fitnessLevel;
+    }
+
+    if (bodyGoal && ['Lean & Fit', 'Muscle Gain', 'Fat Loss', 'Endurance'].includes(bodyGoal)) {
+      updates.bodyGoal = bodyGoal;
     }
 
     if (Number.isInteger(Number(dailyGoal)) && Number(dailyGoal) >= 1 && Number(dailyGoal) <= 6) {

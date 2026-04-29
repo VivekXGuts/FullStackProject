@@ -81,6 +81,11 @@ const userSchema = new mongoose.Schema(
       enum: ['Beginner', 'Intermediate', 'Advanced'],
       default: 'Beginner'
     },
+    bodyGoal: {
+      type: String,
+      enum: ['Lean & Fit', 'Muscle Gain', 'Fat Loss', 'Endurance'],
+      default: 'Lean & Fit'
+    },
     points: { type: Number, default: 0 },
     level: { type: Number, default: 1 },
     badges: { type: [String], default: ['Beginner Badge'] },
