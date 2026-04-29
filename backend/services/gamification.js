@@ -161,6 +161,7 @@ function dashboardMetrics(user, rank) {
   const today = dateKey();
   const workouts = user.completedWorkouts || [];
   const history = user.activityHistory || [];
+  const dailyLogs = user.dailyLogs || [];
   const todayActivities = activitiesForDate(history, today);
   const weeklyDates = Array.from({ length: 7 }, (_, index) => {
     const date = new Date();
@@ -176,6 +177,14 @@ function dashboardMetrics(user, rank) {
       .reduce((total, entry) => total + entry.points, 0)
   }));
 
+  const latestLog = dailyLogs[0] || null;
+  const averageSleep = dailyLogs.length
+    ? Number((dailyLogs.reduce((total, log) => total + (log.sleepHours || 0), 0) / dailyLogs.length).toFixed(1))
+    : 0;
+  const averageRecovery = dailyLogs.length
+    ? Math.round(dailyLogs.reduce((total, log) => total + (log.recoveryRate || 0), 0) / dailyLogs.length)
+    : 0;
+
   return {
     dailyGoal: user.dailyGoal || 2,
     dailyGoalCompleted: todayActivities.length,
@@ -183,6 +192,10 @@ function dashboardMetrics(user, rank) {
     completedWorkouts: workouts.length,
     totalCalories: workouts.reduce((total, workout) => total + (workout.calories || 0), 0),
     totalMinutes: workouts.reduce((total, workout) => total + (workout.duration || 0), 0),
+    latestRecoveryRate: latestLog?.recoveryRate || 0,
+    latestSleepHours: latestLog?.sleepHours || 0,
+    averageSleep,
+    averageRecovery,
     levelProgress: levelProgress(user.points || 0),
     weeklyProgress,
     rank

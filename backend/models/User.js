@@ -48,6 +48,8 @@ const dailyLogSchema = new mongoose.Schema(
     steps: { type: Number, default: 0 },
     caloriesBurned: { type: Number, default: 0 },
     minutesActive: { type: Number, default: 0 },
+    sleepHours: { type: Number, default: 0 },
+    recoveryRate: { type: Number, default: 0 },
     mood: { type: String, default: 'Focused' }
   },
   { _id: false }

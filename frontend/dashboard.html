@@ -40,6 +40,8 @@
       <article class="stat-card"><span>Streak counter</span><strong id="streakValue">0 days</strong></article>
       <article class="stat-card"><span>Current level</span><strong id="levelValue">Level 1</strong></article>
       <article class="stat-card"><span>Leaderboard rank</span><strong id="rankValue">#-</strong></article>
+      <article class="stat-card"><span>Sleep count</span><strong id="sleepValue">0 h</strong></article>
+      <article class="stat-card"><span>Recovery rate</span><strong id="recoveryValue">0%</strong></article>
     </section>
 
     <section class="dashboard-grid">
@@ -93,6 +95,12 @@
           <label>Minutes active
             <input type="number" name="minutesActive" min="0">
           </label>
+          <label>Sleep hours
+            <input type="number" name="sleepHours" min="0" max="24" step="0.5">
+          </label>
+          <label>Recovery rate
+            <input type="number" name="recoveryRate" min="0" max="100" step="1">
+          </label>
           <label>Mood
             <select name="mood">
               <option>Focused</option>
@@ -108,6 +116,11 @@
       <article class="panel">
         <h2>Recent daily logs</h2>
         <div id="dailyLogHistory" class="timeline"></div>
+      </article>
+
+      <article class="panel wide">
+        <h2>Healthy food options</h2>
+        <div id="foodSuggestions" class="food-grid"></div>
       </article>
 
       <article class="panel wide">

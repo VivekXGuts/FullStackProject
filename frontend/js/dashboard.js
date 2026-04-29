@@ -1,5 +1,28 @@
 requireAuth();
 
+const FOOD_SUGGESTIONS = {
+  'Lean & Fit': [
+    { title: 'Greek yogurt bowl', detail: 'Greek yogurt, berries, chia seeds, and almonds' },
+    { title: 'Grilled paneer salad', detail: 'Paneer, cucumber, tomato, greens, and lemon dressing' },
+    { title: 'Oats smoothie', detail: 'Oats, banana, milk, peanut butter, and cinnamon' }
+  ],
+  'Muscle Gain': [
+    { title: 'Chicken rice bowl', detail: 'Chicken breast, rice, avocado, and sauteed vegetables' },
+    { title: 'Egg and toast plate', detail: 'Whole eggs, multigrain toast, peanut butter, and fruit' },
+    { title: 'Protein shake combo', detail: 'Whey shake with banana and a handful of dry fruits' }
+  ],
+  'Fat Loss': [
+    { title: 'Moong chilla plate', detail: 'Moong chilla with mint chutney and curd' },
+    { title: 'Stir-fry tofu bowl', detail: 'Tofu, broccoli, capsicum, and light soy seasoning' },
+    { title: 'Soup and sprouts', detail: 'Vegetable soup with a side of sprouts salad' }
+  ],
+  Endurance: [
+    { title: 'Peanut banana oats', detail: 'Oats with banana, peanut butter, and dates' },
+    { title: 'Pasta fuel bowl', detail: 'Whole wheat pasta with veggies and lean protein' },
+    { title: 'Electrolyte snack plate', detail: 'Coconut water, fruit, yogurt, and trail mix' }
+  ]
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     const connectRealtime = createRealtimeChannel({
@@ -37,6 +60,8 @@ function renderDashboard(user, metrics, { challenge, completed }) {
   document.getElementById('streakValue').textContent = `${user.streak} days`;
   document.getElementById('levelValue').textContent = `Level ${user.level}`;
   document.getElementById('rankValue').textContent = `#${metrics.rank || '-'}`;
+  document.getElementById('sleepValue').textContent = `${metrics.latestSleepHours || 0} h`;
+  document.getElementById('recoveryValue').textContent = `${metrics.latestRecoveryRate || 0}%`;
   document.getElementById('goalProgress').innerHTML = progressBar(metrics.dailyGoalPercent);
   document.getElementById('goalText').textContent = `${metrics.dailyGoalCompleted}/${metrics.dailyGoal} activities complete`;
   document.getElementById('levelProgress').innerHTML = progressBar(metrics.levelProgress.percent);
@@ -66,6 +91,7 @@ function renderDashboard(user, metrics, { challenge, completed }) {
   renderWeeklyProgress(metrics.weeklyProgress);
   renderActivityHistory(user.activityHistory || []);
   renderDailyLogs(user.dailyLogs || []);
+  renderFoodSuggestions(user.bodyGoal || 'Lean & Fit', metrics);
 }
 
 function renderWeeklyProgress(weeklyProgress) {
@@ -105,7 +131,7 @@ function renderActivityHistory(history) {
 function renderDailyLogs(dailyLogs) {
   const container = document.getElementById('dailyLogHistory');
   if (!dailyLogs.length) {
-    container.innerHTML = '<p class="muted">No daily logs yet. Add steps and calories to build your streak.</p>';
+    container.innerHTML = '<p class="muted">No daily logs yet. Add sleep, recovery, steps, and calories to build your streak.</p>';
     return;
   }
 
@@ -115,10 +141,31 @@ function renderDailyLogs(dailyLogs) {
       (log) => `
         <article class="timeline-item">
           <div>
-            <strong>${log.steps} steps • ${log.caloriesBurned} calories</strong>
-            <span>${formatDate(log.date)} • ${log.minutesActive || 0} active min • ${log.mood}</span>
+            <strong>${log.steps} steps • ${log.caloriesBurned} calories • ${log.sleepHours || 0}h sleep</strong>
+            <span>${formatDate(log.date)} • ${log.minutesActive || 0} active min • ${log.recoveryRate || 0}% recovery • ${log.mood}</span>
           </div>
           <b>Log</b>
+        </article>
+      `
+    )
+    .join('');
+}
+
+function renderFoodSuggestions(bodyGoal, metrics) {
+  const suggestions = FOOD_SUGGESTIONS[bodyGoal] || FOOD_SUGGESTIONS['Lean & Fit'];
+  const recoveryNote =
+    metrics.latestRecoveryRate >= 75
+      ? 'Recovery is strong today. Fuel performance and stay hydrated.'
+      : 'Recovery looks lower today. Focus on protein, hydration, and easy-digest meals.';
+
+  document.getElementById('foodSuggestions').innerHTML = suggestions
+    .map(
+      (item) => `
+        <article class="food-card">
+          <span class="food-tag">${bodyGoal}</span>
+          <h3>${item.title}</h3>
+          <p>${item.detail}</p>
+          <small>${recoveryNote}</small>
         </article>
       `
     )
@@ -137,7 +184,11 @@ function wireDailyLogForm() {
         method: 'POST',
         body: JSON.stringify(payload)
       });
-      showMessage('dashboardMessage', 'Daily log saved. Your points and streak are updated.', 'success');
+      showMessage(
+        'dashboardMessage',
+        'Daily log saved. Sleep, recovery, and activity points are updated.',
+        'success'
+      );
       location.reload();
     } catch (error) {
       showMessage('dashboardMessage', error.message);
