@@ -6,6 +6,19 @@ const { getStore } = require('../data/store');
 const { dashboardMetrics } = require('../services/gamification');
 
 const router = express.Router();
+const BLOCKED_EMAIL_DOMAINS = new Set([
+  'example.com',
+  'example.org',
+  'example.net',
+  'test.com',
+  'fake.com',
+  'mailinator.com',
+  'guerrillamail.com',
+  'tempmail.com',
+  'yopmail.com',
+  '10minutemail.com',
+  'sharklasers.com'
+]);
 
 function createToken(user) {
   return jwt.sign(
@@ -19,13 +32,28 @@ function createToken(user) {
   );
 }
 
+function isRealisticEmail(email) {
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return false;
+
+  const normalized = email.toLowerCase().trim();
+  const [, domain = ''] = normalized.split('@');
+
+  if (!domain || BLOCKED_EMAIL_DOMAINS.has(domain)) return false;
+  if (normalized.includes('..')) return false;
+  if (normalized.startsWith('.') || normalized.endsWith('.')) return false;
+  if (domain.startsWith('-') || domain.endsWith('-')) return false;
+  if (!/^[a-z0-9.-]+$/.test(domain)) return false;
+
+  return true;
+}
+
 function validateSignup(req, res, next) {
   const { username, email, password } = req.body;
   if (!username || username.trim().length < 3) {
     return res.status(400).json({ message: 'Username must be at least 3 characters.' });
   }
-  if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-    return res.status(400).json({ message: 'A valid email is required.' });
+  if (!isRealisticEmail(email)) {
+    return res.status(400).json({ message: 'Please enter a real email address. Temporary and fake emails are not allowed.' });
   }
   if (!password || password.length < 8) {
     return res.status(400).json({ message: 'Password must be at least 8 characters.' });

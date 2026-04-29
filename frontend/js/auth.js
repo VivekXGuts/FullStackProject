@@ -1,6 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
   const signupForm = document.getElementById('signupForm');
   const loginForm = document.getElementById('loginForm');
+  const blockedDomains = new Set([
+    'example.com',
+    'example.org',
+    'example.net',
+    'test.com',
+    'fake.com',
+    'mailinator.com',
+    'guerrillamail.com',
+    'tempmail.com',
+    'yopmail.com',
+    '10minutemail.com',
+    'sharklasers.com'
+  ]);
 
   if (getToken() && (signupForm || loginForm)) {
     location.href = '/dashboard.html';
@@ -15,6 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const formData = new FormData(signupForm);
       const payload = Object.fromEntries(formData.entries());
+      const normalizedEmail = payload.email?.toLowerCase().trim() || '';
+
+      if (!isRealisticEmail(normalizedEmail, blockedDomains)) {
+        throw new Error('Please enter a real email address. Temporary and fake emails are not allowed.');
+      }
+
+      payload.email = normalizedEmail;
       const result = await apiFetch('/auth/signup', {
         method: 'POST',
         body: JSON.stringify(payload)
@@ -51,3 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+function isRealisticEmail(email, blockedDomains) {
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return false;
+
+  const [, domain = ''] = email.split('@');
+
+  if (!domain || blockedDomains.has(domain)) return false;
+  if (email.includes('..')) return false;
+  if (email.startsWith('.') || email.endsWith('.')) return false;
+  if (domain.startsWith('-') || domain.endsWith('-')) return false;
+  if (!/^[a-z0-9.-]+$/.test(domain)) return false;
+
+  return true;
+}
